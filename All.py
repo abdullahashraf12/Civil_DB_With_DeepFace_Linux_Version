@@ -218,11 +218,7 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
             model_name = models[7],
             detector_backend=backends[2]
             )
-            result = DeepFace.verify(img1_path = self.get_path_image_search() , 
-            img2_path = person_image_data, 
-            model_name = models[7],
-            detector_backend=backends[2]
-            )
+            
             if(result["verified"]==True and i<=number):                
                 self.first_name_text_2.setText(first_name)
                 self.second_name_text_2.setText(second_name)
