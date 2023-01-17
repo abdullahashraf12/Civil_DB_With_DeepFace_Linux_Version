@@ -216,7 +216,11 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
             detector_backend=backends[2]
             )
                 
-            if(result["verified"]==True and i<=number):                
+            if(result["verified"]==True and i<=number):   
+                similarity = 1 - (result["distance"] / 2)
+                print("Similarity Score:", similarity) 
+                similarity_score=1-similarity
+                similarity_score_precentage="{}%".format(str(100-round(similarity_score,2)))             
                 self.first_name_text_2.setText(first_name)
                 self.second_name_text_2.setText(second_name)
                 self.full_name_text_2.setText(full_name)
@@ -231,10 +235,12 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
                 label.setPixmap(my_photo_size)
                 self.social_state_text_2.setText(social_state_text)
                 self.label_15.setText("Found")
-                self.label_11.setText("Verified")
+                self.label_11.setText("Verified {}".format(similarity_score_precentage))
                 self.label_11.setStyleSheet("QLabel { background-color : black; color : green; }")
                 self.repaint()
                 print("Found",time.time()-start_time)
+                similarity = 1 - (result["distance"] / 2)
+                print("Similarity Score:", similarity)
                 break
                 
                 # self.label_11.show()
@@ -250,6 +256,7 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
         
 
             elif(result["verified"]==False and i<number):
+
                 self.label_15.setText("Processing")
                 self.label_15.setStyleSheet(" background-color :white ; color : green;")
                 self.label_11.setStyleSheet("QLabel { background-color : black; color : red; }")
@@ -260,6 +267,7 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
                 label.setPixmap(my_photo_size)
                 self.label_11.setText("Searching...")
                 self.label_15.repaint()
+                             
                 
         
             elif(result["verified"]==False and i==number):
