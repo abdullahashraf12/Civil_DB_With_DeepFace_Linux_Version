@@ -1,18 +1,16 @@
 from sys import path
-import PySide6
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap
 from mysql.connector import errors
 from mysql.connector.errors import Error, IntegrityError
-from MainWindow import Ui_My_App
-from PySide6 import QtWidgets
+from Main_Ui import Ui_My_App
 import mysql.connector as mysqlcon
 import os
 import shutil
 from deepface import DeepFace
 import time
-from PySide6.QtCore import QThread
 from numba import jit,cuda
+from PySide6 import QtWidgets
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap
 
 class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
 
@@ -128,7 +126,7 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
             self.upload_photo_dialog()
 
 
-    # @jit(target_backend="cuda")
+    @jit(target_backend="cuda")
     def search_by_face(self):
         connection = mysqlcon.connect(
             user='abdo', 
@@ -185,8 +183,8 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
             host='127.0.0.1',
             database='civil_db')
         cursor2 = connection2.cursor(buffered=True)
-
         sql_2="SELECT COUNT(*) FROM civilization_table"
+
         cursor2.execute(sql_2)
         connection2.commit()  
         record2 = cursor2.fetchall()
@@ -198,6 +196,7 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
 
         i=1
         start_time = time.time()
+        
         for row in record:
             first_name=row[0]
             second_name=row[1]
@@ -208,17 +207,15 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
             gender_type=row[6]
             address=row[7]
             ssn=row[8]
-            uic=row[10]
-            person_image_data = row[11]
-            social_state_text = row[12]
-            print(self.get_path_image_search())
-            print(person_image_data)
+            uic=row[9]
+            person_image_data = row[10]
+            social_state_text = row[11]
             result = DeepFace.verify(img1_path = self.get_path_image_search() , 
             img2_path = person_image_data, 
             model_name = models[7],
             detector_backend=backends[2]
             )
-            
+                
             if(result["verified"]==True and i<=number):                
                 self.first_name_text_2.setText(first_name)
                 self.second_name_text_2.setText(second_name)
@@ -237,7 +234,9 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
                 self.label_11.setText("Verified")
                 self.label_11.setStyleSheet("QLabel { background-color : black; color : green; }")
                 self.repaint()
+                print("Found",time.time()-start_time)
                 break
+                
                 # self.label_11.show()
                 # print("--- %s seconds ---" % (time.time() - start_time))
                 # break
@@ -281,6 +280,8 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
                 self.label_11.setText("Person isn't in DB")
                 self.label_11.setStyleSheet("QLabel { background-color : black; color : red; }")
                 self.repaint()
+                print("Not Found",time.time()-start_time)
+
             i+=1
 
 
@@ -416,9 +417,9 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
                 gender_type=row[6]
                 address=row[7]
                 ssn=row[8]
-                uic=row[10]
-                person_image_data = row[11]
-                social_state_text=row[12]
+                uic=row[9]
+                person_image_data = row[10]
+                social_state_text=row[11]
                 # type_of_image=row[12]
             if ssn == None or ssn=="None"or ssn=="":
                 msg.setText("Please Enter valid ssn if it's valid then it's not in database")
@@ -430,6 +431,7 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
                 self.dob_text.setText("Day :- "+str(day_birth)+" Month:- "+str(month_birth)+" Year:- "+str(year_birth))
                 self.gender_text.setText(gender_type)
                 self.social_state_text.setText(social_state_text)
+
                 self.full_address_text.setText(address)
                 self.uic_text.setText(uic)
 
