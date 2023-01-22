@@ -20,7 +20,7 @@ backends = [
 'mediapipe'# 5
 ]
 
-data=DeepFace.stream("/home/abdullah/Pictures/Screenshots/For_Search/",model_name=models[6],detector_backend=backends[4],time_threshold=5)
+data=DeepFace.stream("/home/abdullah/Pictures/Screenshots/For_Search/",model_name=models[6],detector_backend=backends[4],time_threshold=1,frame_threshold=1,enable_face_analysis = False,)
 
 
 
