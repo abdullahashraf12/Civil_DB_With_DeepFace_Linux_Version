@@ -289,7 +289,8 @@ class MainWindow(QtWidgets.QMainWindow,Ui_My_App):
                 self.label_11.setStyleSheet("QLabel { background-color : black; color : red; }")
                 self.repaint()
                 print("Not Found",time.time()-start_time)
-
+                similarity = 1 - (result["distance"] / 2)
+                print("Similarity Score:", similarity)
             i+=1
 
 
