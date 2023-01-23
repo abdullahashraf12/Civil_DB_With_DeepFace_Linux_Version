@@ -4,7 +4,7 @@ models = [
 "VGG-Face", # 0
 "Facenet",  # 1
 "Facenet512", # 2
-"OpenFace", # 3
+"OpenFace", # 3q
 "DeepFace", # 4
 "DeepID", # 5
 "ArcFace", # 6
